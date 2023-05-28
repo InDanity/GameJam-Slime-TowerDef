@@ -5,15 +5,16 @@ using UnityEngine;
 public class PlayerMovement : MonoBehaviour
 {
     [Header("Movement")]
-    public float movementSpeed;
-
+    private float movementSpeed;
+    public float walkSpeed;
+    public float sprintSpeed;
+    
     public float groundDrag;
-
-    // When in the air after jumping
     public float airMultiplier;
 
     [Header("Keybinds")]
     public KeyCode jumpKey = KeyCode.Space;
+    public KeyCode sprintKey = KeyCode.LeftShift;
 
     [Header("Ground Check")]
     public float playerHeight;
@@ -22,14 +23,21 @@ public class PlayerMovement : MonoBehaviour
 
     public Transform orientation;
 
-    // WASD Movement
     float horizontalInput;
     float verticalInput;
 
     Vector3 moveDirection;
 
     Rigidbody body;
- 
+
+    public MovementState state;
+
+    public enum MovementState
+    {
+        walking,
+        sprinting,
+        air
+    }
     
     // Start is called before the first frame update
     private void Start()
@@ -44,8 +52,9 @@ public class PlayerMovement : MonoBehaviour
         // Ground check
         grounded = Physics.Raycast(transform.position, Vector3.down, playerHeight * 0.5f + 0.2f, whatIsGround);
 
-        MyInput();
+        myInput();
         speedControl();
+        stateHandler();
 
         // Handle drag
         if (grounded)
@@ -64,7 +73,7 @@ public class PlayerMovement : MonoBehaviour
     }
 
     // Gets player input
-    private void MyInput()
+    private void myInput()
     {
         horizontalInput = Input.GetAxisRaw("Horizontal");
         verticalInput = Input.GetAxisRaw("Vertical");
@@ -100,6 +109,28 @@ public class PlayerMovement : MonoBehaviour
         {
             Vector3 limitedVel = flatVel.normalized * movementSpeed;
             body.velocity = new Vector3(limitedVel.x, body.velocity.y, limitedVel.z);
+        }
+    }
+
+    private void stateHandler()
+    {
+        // Sprinting
+        if(grounded && Input.GetKey(sprintKey))
+        {
+            state = MovementState.sprinting;
+            movementSpeed = sprintSpeed;
+        }
+
+        // Walking
+        else if (grounded)
+        {
+            state = MovementState.walking;
+            movementSpeed = walkSpeed;
+        }
+
+        else
+        {
+            state = MovementState.air;
         }
     }
 
