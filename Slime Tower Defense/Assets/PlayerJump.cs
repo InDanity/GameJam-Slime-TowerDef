@@ -6,9 +6,13 @@ public class PlayerJump : MonoBehaviour
 {
     Rigidbody rb;
     public float jumpHeight = 10;
-    public bool grounded;
     public int maxJumpCount = 2;
     public int jumpsRemaining = 0;
+
+    [Header("Ground Check")]
+    public float playerHeight;
+    public LayerMask whatIsGround;
+    public bool grounded;
 
     void Start()
     {
@@ -18,6 +22,9 @@ public class PlayerJump : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        // Ground check
+        grounded = Physics.Raycast(transform.position, Vector3.down, playerHeight * 0.5f + 0.2f, whatIsGround);
+
         if (grounded && (Input.GetKeyDown(KeyCode.Space)) && (jumpsRemaining > 0))
         {
             rb.AddForce(Vector3.up * jumpHeight, ForceMode.Impulse);
@@ -37,13 +44,7 @@ public class PlayerJump : MonoBehaviour
     {
         if (collision.gameObject.tag == "Floor")
         {
-            grounded = true;
             jumpsRemaining = maxJumpCount;
         }
-    }
-    public void OnCollisionExit(Collision collision)
-    {
-        if (collision.gameObject.tag == "Floor")
-            grounded = false;
     }
 }
