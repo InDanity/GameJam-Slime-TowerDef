@@ -182,7 +182,7 @@ GameObject:
   - component: {fileID: 690036410}
   m_Layer: 10
   m_Name: Terrain
-  m_TagString: Untagged
+  m_TagString: Floor
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 2147483647
@@ -581,6 +581,7 @@ GameObject:
   - component: {fileID: 1715417180}
   - component: {fileID: 1715417179}
   - component: {fileID: 1715417181}
+  - component: {fileID: 1715417182}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -636,8 +637,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   movementSpeed: 5
   groundDrag: 5
-  jumpForce: 10
-  jumpCooldown: 0.25
   airMultiplier: 0.5
   jumpKey: 32
   playerHeight: 2
@@ -645,6 +644,22 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 1024
   orientation: {fileID: 2070022998}
+--- !u!114 &1715417182
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1715417178}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fcea085506e61054fad2b901503fea27, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  jumpHeight: 5
+  grounded: 0
+  maxJumpCount: 2
+  jumpsRemaining: 0
 --- !u!1 &2070022997
 GameObject:
   m_ObjectHideFlags: 0

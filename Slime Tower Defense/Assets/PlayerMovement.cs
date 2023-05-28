@@ -9,10 +9,8 @@ public class PlayerMovement : MonoBehaviour
 
     public float groundDrag;
 
-    public float jumpForce;
-    public float jumpCooldown;
+    // When in the air after jumping
     public float airMultiplier;
-    bool readyToJump;
 
     [Header("Keybinds")]
     public KeyCode jumpKey = KeyCode.Space;
@@ -24,6 +22,7 @@ public class PlayerMovement : MonoBehaviour
 
     public Transform orientation;
 
+    // WASD Movement
     float horizontalInput;
     float verticalInput;
 
@@ -37,8 +36,6 @@ public class PlayerMovement : MonoBehaviour
     {
         body = GetComponent<Rigidbody>();
         body.freezeRotation = true;
-
-        readyToJump = true;
     }
 
     // Update is called once per frame
@@ -71,17 +68,6 @@ public class PlayerMovement : MonoBehaviour
     {
         horizontalInput = Input.GetAxisRaw("Horizontal");
         verticalInput = Input.GetAxisRaw("Vertical");
-
-        // Allows jumping
-        if(grounded && readyToJump && Input.GetKey(jumpKey))
-        {
-            readyToJump = false;
-
-            jump();
-
-            // Calls resetJump with the cd as the delay, allowing for continious jumping if space is held
-            Invoke(nameof(resetJump), jumpCooldown);
-        }
 
     }
 
@@ -117,18 +103,5 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
-    private void jump()
-    {
-        // Reset y-velocity
-        body.velocity = new Vector3(body.velocity.x, 0f, body.velocity.z);
 
-        // ForceMode.Impulse applies the force ONCE 
-        body.AddForce(transform.up * jumpForce, ForceMode.Impulse);
-    }
-
-    private void resetJump()
-    {
-        // Resets readyToJump to true again
-        readyToJump = true;
-    }
 }
